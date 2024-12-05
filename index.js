@@ -10,8 +10,7 @@ dotenv.config()
 
 const app = express();
 
-const mongoURL = "mongodb+srv://AdminChristina:0213@cluster0.77wdj.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
-
+const mongoURL = ""
 
 mongoose.connect(mongoURL,{})
 const connection = mongoose.connection;
