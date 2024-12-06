@@ -19,26 +19,27 @@ connection.once("open",()=>
 
 
 app.use(bodyParser.json())
-app.use(
-  (req,res,next)=>{
+app.use((req, res, next) => {
+  const token = req.header("authorization")?.replace("Bearer ", "");
 
-    const token = req.header("authorization")?.replace("Bearer ","")
+  console.log("Received Token:", token);
 
-    console.log(token)
-
-    if(token != null){
-      jwt.verify(token, process.env.SECRET , (error, decoded)=>{
-        if(!error){
-          
-          req.user = decoded 
-        }
-      })
-    }
-
-    next()
-
+  if (token != null) {
+      jwt.verify(token, process.env.SECRET, (error, decoded) => {
+          if (!error) {
+              req.user = decoded;
+              console.log("Decoded user:", decoded); // Check if admin is decoded
+          } else {
+              req.user = null;
+              console.log("Token verification failed:", error.message);
+          }
+      });
+  } else {
+      req.user = null;
   }
-)
+
+  next();
+});
 
 
 app.use("/api/users", userRouter)

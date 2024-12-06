@@ -2,45 +2,43 @@ import User from "../models/user.js";
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import dotenv from "dotenv";
+
 dotenv.config();
 
-export function createUser(req, res){
+export function createUser(req, res) {
+    const newUserData = req.body;
 
-    const newUserData = req.body
-
-    if (newUserData.type == "admin"){
-        if (req.user==null){
+    if (newUserData.type === "admin") {
+        if (!req.user) {
             res.json({
-                message: "Please login as adminstrator to create admin accounts"
-            })
-            return
-
+                message: "Please login as administrator to create admin accounts."
+            });
+            return;
         }
 
-        if (req.user.type != "admin"){
+        if (req.user.type !== "admin") {
             res.json({
-                message: "Please login as adminstrator to create admin accounts"
-            })
-            return
+                message: "Only administrators can create admin accounts."
+            });
+            return;
         }
-    } 
-    newUserData.password = bcrypt.hashSync(newUserData.password, 10)
+    }
 
+    newUserData.password = bcrypt.hashSync(newUserData.password, 10);
 
     const user = new User(newUserData);
     user.save()
         .then(() => {
             res.json({
-                message: "User created",
+                message: "User created successfully.",
             });
         })
-        .catch(() => {
+        .catch((e) => {
             res.json({
-                message: "User not created",
+                message: "User not created. Error: " + e.message
             });
         });
 }
-
 export function loginUser(req, res) { 
     User.find({ email: req.body.email }).then((users) => {
         if (users.length == 0) {
@@ -60,7 +58,10 @@ export function loginUser(req, res) {
                         type: user.type,
                         profilePicture: user.profilePicture,
                     }, process.env.SECRET)
-
+                    
+                    // Log the generated token for debugging
+                console.log("Generated Token:", token);
+                
                 res.json({
                     message: "User logged in",
                     token: token,
