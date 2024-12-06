@@ -42,7 +42,7 @@ app.use((req, res, next) => {
 });
 
 
-app.use("/api/users", userRouter)
+app.use("/api/users", userRouter);
 
 app.listen(5000, 
     () => {
