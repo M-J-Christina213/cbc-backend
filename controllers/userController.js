@@ -7,7 +7,7 @@ dotenv.config();
 
 export function createUser(req, res) {
     const newUserData = req.body;
-    
+
     if (newUserData.type === "admin") {
         if (!req.user) {
             return res.json({
@@ -73,5 +73,5 @@ export function loginUser(req, res) {
 }
 
 
-// Admin - christina.Rodrigo@gmail.com - securepassword123
+// Admin - christina.rodrigo1@gmail.com - securepassword123
 //customer - christina.Rodrigo@example.com - securepassword123
