@@ -33,7 +33,16 @@ export async function createOrder(req,res){
         const newOrderData = req.body 
         newOrderData.orderId = orderId
         newOrderData.email = req.user.email
-       
+        
+         // Save the new order to the database
+         const newOrder = new order(newOrderData);
+         await newOrder.save();
+ 
+         // Respond with success message after saving the order
+         res.json({
+             message: "Order created successfully",
+             orderId: newOrder.orderId
+         });
 
     }catch(error){
         res.status(500).json({
