@@ -1,4 +1,5 @@
 import Product from "../models/product.js";
+import { isAdmin } from "./userController.js";
 
 export function createProduct(req,res){
     // ! is used to check if isAdmin is false
