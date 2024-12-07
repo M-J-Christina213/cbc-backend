@@ -1,4 +1,4 @@
-import Order from "..model/order.js"
+import Order from "../models/order.js"
 
 export async function createOrder(req,res){
 
