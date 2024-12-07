@@ -32,7 +32,7 @@ const orderSchema = mongoose.Schema({
     ],
 
     date : {
-        type : date,
+        type : Date,
         default : Date.now
     },
     paymentId : {
