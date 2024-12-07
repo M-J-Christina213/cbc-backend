@@ -2,6 +2,11 @@ import order from "..model/order.js"
 
 export async function createOrder(req,res){
 
+    if(!isCustomer){
+        res.json ({
+            message : "Please login as customer to create orders"
+        })
+    }
     try{
         const latestOrder = await order.find().sort
         ({date : -1}).limit(1)
