@@ -30,6 +30,8 @@ export async function createOrder(req,res){
         }
 
         const newOrderData = req.body 
+        newOrderData.orderId = orderId
+        newOrderData.email = req.user.email
        
 
     }catch(error){
