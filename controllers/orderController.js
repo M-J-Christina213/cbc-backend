@@ -12,12 +12,15 @@ export async function createOrder(req, res) {
         const latestOrder = await order.find().sort({ date: -1 }).limit(1);
         let orderId;
 
-        if (latestOrder.length ==0) {
+        if (latestOrder.length == 0) {
             orderId = "CBC0001";
         } else {
             const currentOrderId = latestOrder[0].orderId;
+
             const numberString = currentOrderId.replace("CBC","");
+
             const number = parseInt(numberString);
+
             const newNumber = (number + 1).toString().padStart(4, "0");
             orderId = "CBC" + newNumber;
         }
