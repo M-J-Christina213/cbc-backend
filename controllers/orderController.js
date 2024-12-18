@@ -33,7 +33,12 @@ export async function createOrder(req, res) {
                 productId: newOrderData.orderedItems[i].productID
             })
 
-            console.log(product)
+            if(product==null){
+                res.json({
+                    message : "Product with id " + orderedItems[i].productId + " not found"
+                })
+                return
+            }
         }
 /*
         {
