@@ -26,6 +26,11 @@ export async function createOrder(req, res) {
         }
 
         const newOrderData = req.body;
+        const newProductArray = []
+
+        for (let i=0;i<req.body.orderedItems.length;i++){
+            console.log(req.body.orderedItems[i])
+        }
 /*
         {
             "productID": "B20001",
