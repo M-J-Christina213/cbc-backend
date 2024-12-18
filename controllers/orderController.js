@@ -26,6 +26,14 @@ export async function createOrder(req, res) {
         }
 
         const newOrderData = req.body;
+/*
+        {
+            "productID": "B20001",
+            "price": 24.99,
+            "stock": 10,
+            "image" : "https://example.com/images/handcream.jpeg"
+          }
+*/
         newOrderData.orderId = orderId;
         newOrderData.email = req.user.email;
 
