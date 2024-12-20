@@ -41,7 +41,7 @@ export async function createOrder(req, res) {
             }
  // Build the product structure for the new order
             newProductArray[i] = {
-                name : product.name,
+                name : product.productName,
                 price : product.price,
                 quantity : newOrderData.orderedItems[i].quantity,
                 image : product.images[0]
