@@ -46,6 +46,8 @@ export async function createOrder(req, res) {
                 quantity : newOrderData.orderedItems[i].quantity,
                 image : product.images[0]
             }
+
+            //put another for loop before saving the product from each elemnt if quantity can be reduced - Day 10 - 54:35
         }
         console,log(newProductArray)
 
