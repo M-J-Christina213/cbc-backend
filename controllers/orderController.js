@@ -40,9 +40,9 @@ export async function createOrder(req, res) {
                 return
             }
 
-            if (product.quantity < newOrderData.orderedItems[i].quantity){
+            if (product.stock < newOrderData.orderedItems[i].quantity){
                 res.json({
-                    message: "Sorry, not enough stock available for " + product.productName + "Please update your order and try again"
+                    message: "Sorry, not enough stock available for " + product.productName + " Please update your order and try again"
                 })
             }
  // Build the product structure for the new order
@@ -63,7 +63,7 @@ export async function createOrder(req, res) {
 
             await Product.updateOne(
                 { productId : orderedItem.productId },
-                {quantity: Product.quantity - orderedItem.quantity }
+                {quantity: Product.stock- orderedItem.quantity }
             )
         }
 
