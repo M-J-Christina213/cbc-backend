@@ -6,11 +6,14 @@ import jwt from 'jsonwebtoken';
 import dotenv from "dotenv";
 import productRouter from './routers/productRouter.js';
 import orderRouter from './routers/orderRouter.js';
+import cors from 'cors';
 dotenv.config()
 
 const app = express();
 
 const mongoURL = process.env.MONGO_DB_URI
+
+app.use(cors())
 
 mongoose.connect(mongoURL,{})
 const connection = mongoose.connection;
