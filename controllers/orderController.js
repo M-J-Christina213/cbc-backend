@@ -57,6 +57,17 @@ export async function createOrder(req, res) {
         }
         console.log(newProductArray)
 
+        //Reduce product quanities based on order
+        for (let i=0; i <newOrderData.orderedItems.length;i++){
+            const orderedItem = newOrderData.orderedItems[i];
+
+            await Product.updateOne(
+                { productId : orderedItem.productId },
+                {quantity: Product.quantity - orderedItem.quantity }
+            )
+        }
+
+
          // Assign the new order details including ordered items
         newOrderData.orderedItems = newProductArray
 
