@@ -28,9 +28,9 @@ export async function createOrder(req, res) {
         const newOrderData = req.body;
         const newProductArray = []
 // Loop through orderedItems to find corresponding products and create a new array
-        for (let i=0;i<req.body.orderedItems.length;i++){
+        for (let i=0;i<newOrderData.orderedItems.length;i++){
             const product = await Product.findOne({
-                productId: newOrderData.orderedItems[i].productID
+                productId: newOrderData.orderedItems[i].productId
             })
 
             if(product==null){
@@ -49,7 +49,7 @@ export async function createOrder(req, res) {
 
             //put another for loop before saving the product from each elemnt if quantity can be reduced - Day 10 - 54:35
         }
-        console,log(newProductArray)
+        console.log(newProductArray)
 
          // Assign the new order details including ordered items
         newOrderData.orderedItems = newProductArray
