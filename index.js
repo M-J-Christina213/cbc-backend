@@ -34,16 +34,19 @@ app.use((req, res, next) => {
           if (!error) {
               req.user = decoded;
               console.log("Decoded user:", decoded); // Check if admin is decoded
+              next();
           } else {
               req.user = null;
               console.log("Token verification failed:", error.message);
+              next();
           }
       });
   } else {
-      req.user = null;
+      req.user = null; //if no token is received
+      next();
   }
 
-  next();
+  
 });
 
 

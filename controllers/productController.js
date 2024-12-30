@@ -4,9 +4,11 @@ import { isAdmin } from "./userController.js";
 export function createProduct(req,res){
     // ! is used to Check if the user is an admin
     if(!isAdmin(req)){
-        res.json({
-            message : "Please login as adminstrator to add products"
-        });
+        return res.status(403).json({
+          message : "Please login as adminstrator to add products"
+        })
+            
+        
     }
     const newProductData = req.body
 
@@ -18,7 +20,7 @@ export function createProduct(req,res){
       })
     }).catch((error)=>{
         res.status(403).json({
-            message: error
+            message: error.message || "An error occurred while adding the product"
         })
     })
     
@@ -28,4 +30,9 @@ export function getProducts(req,res){
     Product.find({}).then((products)=>{
         res.json(products)
     })
+    .catch((error) => {
+        res.status(500).json({
+          message: error.message || "An error occurred while fetching the products"
+        });
+      });
 }
