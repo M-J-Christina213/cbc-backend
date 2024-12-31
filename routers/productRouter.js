@@ -4,6 +4,6 @@ import { createProduct, deleteProducts, getProducts } from '../controllers/produ
 
  productRouter.post("/", createProduct)
  productRouter.get("/", getProducts)
- productRouter.delete("/:productId", deleteProducts)
+ productRouter.delete("/:productID", deleteProducts)
 
  export default productRouter;
