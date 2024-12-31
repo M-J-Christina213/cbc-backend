@@ -36,3 +36,27 @@ export function getProducts(req,res){
         });
       });
 }
+
+export function deleteProducts (req,res){
+    if(!isAdmin(req)){
+        return res.status(403).json({
+          message : "Please login as adminstrator to add products"
+        })     
+        
+    }
+
+    const productId = req.params.productId
+
+    Product.deleteOne(
+        {productId : productId}
+    ).then(()=>{
+        res.json({
+            message : "Product Deleted"
+        })
+    }) .catch((error) => {
+        res.status(403).json({
+          message: error.message || "An error occurred while deleting the product"
+        });
+      });
+}
+
