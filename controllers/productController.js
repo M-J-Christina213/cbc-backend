@@ -60,3 +60,27 @@ export function deleteProducts (req,res){
       });
 }
 
+export function updateProduct(req, res) {
+  if (!isAdmin(req)) {
+      return res.status(403).json({
+          message: "Please login as administrator to update products"
+      });
+  }
+
+  const productId = req.params.productId;
+  const updatedData = req.body; // Assuming the new product details are in the body
+
+  Product.updateOne(
+      { productId: productId },
+      { $set: updatedData } // Using $set to only update the fields that are provided
+  ).then(() => {
+      res.json({
+          message: "Product updated successfully"
+      });
+  }).catch((error) => {
+      res.status(403).json({
+          message: error.message || "An error occurred while updating the product"
+      });
+  });
+}
+
