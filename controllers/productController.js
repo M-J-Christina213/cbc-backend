@@ -68,19 +68,28 @@ export function updateProduct(req, res) {
   }
 
   const productId = req.params.productId;
-  const updatedData = req.body; // Assuming the new product details are in the body
+  const updatedData = req.body;
 
-  Product.updateOne(
-      { productId: productId },
-      { $set: updatedData } // Using $set to only update the fields that are provided
-  ).then(() => {
+  Product.findOneAndUpdate(
+      { productId: productId }, // Find product by productID
+      { $set: updatedData },     // Only update provided fields
+      { new: true }              // Return the updated product
+  )
+  .then((updatedProduct) => {
+      if (!updatedProduct) {
+          return res.status(404).json({
+              message: "Product not found"
+          });
+      }
       res.json({
-          message: "Product updated successfully"
+          message: "Product updated successfully",
+          product: updatedProduct
       });
-  }).catch((error) => {
-      res.status(403).json({
+  })
+  .catch((error) => {
+      console.error(error);
+      res.status(500).json({
           message: error.message || "An error occurred while updating the product"
       });
   });
 }
-
