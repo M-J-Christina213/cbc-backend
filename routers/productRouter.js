@@ -4,7 +4,7 @@ import { createProduct, deleteProducts, getProductById, getProducts, updateProdu
 
  productRouter.post("/", createProduct)
  productRouter.get("/", getProducts)
- productRouter.get("/", getProductById)
+ productRouter.get("/:productID", getProductById)
  productRouter.delete("/:productID", deleteProducts)
  productRouter.put("/:productID", updateProduct)
  export default productRouter;
