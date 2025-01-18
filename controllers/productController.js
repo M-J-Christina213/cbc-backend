@@ -13,7 +13,7 @@ export function createProduct(req,res){
     const newProductData = req.body
 
     const product = new Product(newProductData)
-
+    console.log(product);
     product.save().then(()=>{
       res.json({
         message: "Product created"
@@ -68,26 +68,24 @@ export function updateProduct(req, res) {
   }
 
   const productId = req.params.productId;
-  const updatedData = req.body;
+  let newProductData = req.body;
 
-  Product.findOneAndUpdate(
-      { productId: productId }, // Find product by productID
-      { $set: updatedData },     // Only update provided fields
-      { new: true }              // Return the updated product
+  // Ensure productID is excluded from the update data
+  if (newProductData.productId) {
+      delete newProductData.productId;
+  }
+
+  // Now, update the product with the filtered data
+  Product.updateOne(
+      { productId: productId },  // Find product by productId
+      newProductData,  // Only update the other fields
   )
-  .then((updatedProduct) => {
-      if (!updatedProduct) {
-          return res.status(404).json({
-              message: "Product not found"
-          });
-      }
+  .then(() => {
       res.json({
-          message: "Product updated successfully",
-          product: updatedProduct
+          message: "Product with " + productId + " updated successfully",
       });
   })
   .catch((error) => {
-      console.error(error);
       res.status(500).json({
           message: error.message || "An error occurred while updating the product"
       });
