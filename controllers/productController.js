@@ -96,11 +96,11 @@ export async function getProductById(req, res) {
   try {
     const productId = req.params.productID;
     console.log("Product ID received:", productId);
-    
+
     const product = await Product.findOne({ productID: productId });
 
     if (!product) {
-      return res.status(404).json(null);  
+      return res.status(404).json({ message: "Product not found" }); // Send a meaningful response
     }
 
     res.json(product);
