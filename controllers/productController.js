@@ -94,17 +94,18 @@ export function updateProduct(req, res) {
 
 export async function getProductById(req, res) {
   try {
-    const productId = req.params.productID;
-    console.log("Product ID received:", productId);
+      const productId = req.params.productID;
+      console.log("Product ID received:", productId);
 
-    const product = await Product.findOne({ productID: productId });
+      const product = await Product.findOne({ productID: productId });
 
-    if (!product) {
-      return res.status(404).json({ message: "Product not found" }); // Send a meaningful response
-    }
+      if (!product) {
+          return res.status(404).json({ message: "Product not found" });
+      }
 
-    res.json(product);
-  } catch (e) {
-    res.status(500).json({ error: e.message });
+      res.json(product);
+  } catch (error) {
+      console.error("Error fetching product:", error.message);
+      res.status(500).json({ error: "An internal server error occurred." });
   }
 }
