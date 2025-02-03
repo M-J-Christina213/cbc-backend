@@ -48,8 +48,8 @@ export async function createOrder(req, res) {
  // Build the product structure for the new order
             newProductArray[i] = {
                 name : product.productName,
-                price : product.price,
-                quantity : newOrderData.orderedItems[i].quantity,
+                price : product.lastPrice,
+                quantity : newOrderData.orderedItems[i].qty,
                 image : product.images[0]
             }
 
@@ -63,7 +63,7 @@ export async function createOrder(req, res) {
 
             await Product.updateOne(
                 { productId : orderedItem.productId },
-                {quantity: Product.stock- orderedItem.quantity }
+                {quantity: Product.stock- orderedItem.qty }
             )
         }
 
@@ -131,14 +131,14 @@ export async function getQuote(req,res){
                 })
             }
 
-            labeledTotal += product.price * newOrderData.orderedIems[i].quantity;
-            total += product.lastPrice * newOrderData.orderedIems[i].quantity;
+            labeledTotal += product.price * newOrderData.orderedIems[i].qty;
+            total += product.lastPrice * newOrderData.orderedIems[i].qty;
  // Build the product structure for the new order
             newProductArray[i] = {
                 name : product.productName,
                 price : product.lastPrice,
                 labeledPrice : product.price,
-                quantity : newOrderData.orderedItems[i].quantity,
+                quantity : newOrderData.orderedItems[i].qty,
                 image : product.images[0]
             }
 
