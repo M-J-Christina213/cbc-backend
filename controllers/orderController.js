@@ -75,10 +75,11 @@ export async function createOrder(req, res) {
         newOrderData.email = req.user.email;
 
         const newOrder = new order(newOrderData);
-        await newOrder.save()
+        const savedOrder = await newOrder.save()
 
         res.json({
-            message : "Order created"
+            message : "Order created",
+            newOrder: savedOrder
         })
 
     } catch (error) {
