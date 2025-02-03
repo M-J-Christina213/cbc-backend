@@ -6,6 +6,6 @@ const orderRouter = express.Router();
 orderRouter.post("/", createOrder);
 orderRouter.get("/", getOrders);
 
-orderRouter.get("/quote", getQuote)
+orderRouter.post("/quote", getQuote)
 
 export default orderRouter;

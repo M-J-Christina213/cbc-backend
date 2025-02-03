@@ -131,8 +131,8 @@ export async function getQuote(req,res){
                 })
             }
 
-            labeledTotal += product.price * newOrderData.orderedIems[i].qty;
-            total += product.lastPrice * newOrderData.orderedIems[i].qty;
+            labeledTotal += product.price * newOrderData.orderedItems[i].qty;
+            total += product.lastPrice * newOrderData.orderedItems[i].qty;
  // Build the product structure for the new order
             newProductArray[i] = {
                 name : product.productName,
