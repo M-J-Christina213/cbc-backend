@@ -108,7 +108,9 @@ export async function getQuote(req,res){
 
         const newOrderData = req.body;
         const newProductArray = []
-        
+        let total = 0;
+        let labeledTotal = 0;
+
 // Loop through orderedItems to find corresponding products and create a new array
 
         for (let i=0;i<newOrderData.orderedItems.length;i++){
@@ -128,12 +130,14 @@ export async function getQuote(req,res){
                     message: "Sorry, not enough stock available for " + product.productName + " Please update your order and try again"
                 })
             }
+
+            labeledTotal += product.price * newOrderData.orderedIems[i].quantity;
+            total += product.lastPrice * newOrderData.orderedIems[i].quantity;
  // Build the product structure for the new order
             newProductArray[i] = {
                 name : product.productName,
                 price : product.lastPrice,
                 labeledPrice : product.price,
-                discount : product.price - product.lastPrice,
                 quantity : newOrderData.orderedItems[i].quantity,
                 image : product.images[0]
             }
@@ -152,9 +156,16 @@ export async function getQuote(req,res){
             )
         }
 
-
+        console.log(newProductArray)
          // Assign the new order details including ordered items
         newOrderData.orderedItems = newProductArray
+        newOrderData.total = total;
+
+        res.json({
+            orderedIems: newProductArray,
+            total : total,
+            labeledTotal : labeledTotal
+        })
 
 
     } catch (error) {
