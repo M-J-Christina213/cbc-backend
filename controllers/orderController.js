@@ -90,11 +90,21 @@ export async function createOrder(req, res) {
 }
 
 export async function getOrders(req,res){
+    
     try{
+        if (isCustomer(req)){
         const orders = await order.find({email: req.user.email})
 
         res.json(orders)
-    
+        return;
+        } else if (isAdmin(req)){
+            const orders = await order.find({})
+            return;
+        } else{
+            res.json ({
+                message : "Please login to view orders"
+            })
+        }
     }catch(error){
         res.status(500).json({
             message : error.message
@@ -111,6 +121,7 @@ export async function getQuote(req,res){
         const newProductArray = []
         let total = 0;
         let labeledTotal = 0;
+        console.log(req.body)
 
 // Loop through orderedItems to find corresponding products and create a new array
 
