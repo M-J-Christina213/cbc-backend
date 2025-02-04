@@ -40,7 +40,7 @@ export async function createOrder(req, res) {
                 return
             }
 
-            if (product.stock < newOrderData.orderedItems[i].quantity){
+            if (product.stock < newOrderData.orderedItems[i].qty){
                 res.json({
                     message: "Sorry, not enough stock available for " + product.productName + " Please update your order and try again"
                 })
