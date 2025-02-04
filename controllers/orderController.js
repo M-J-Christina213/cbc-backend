@@ -99,6 +99,7 @@ export async function getOrders(req,res){
         return;
         } else if (isAdmin(req)){
             const orders = await order.find({})
+            res.json(orders)
             return;
         } else{
             res.json ({
