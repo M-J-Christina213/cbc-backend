@@ -101,5 +101,22 @@ export function isCustomer(req){
     return true
 }
 
+export async function googleLogin(req,res){
+    const token = await axios.get('https://www.googleapis.com/oauth2/v3/userInfo',{
+        headers:{
+            Authorization : `Bearer ${token}`
+        }
+    })
+
+    try{
+
+
+    }catch(e){
+        res.json({
+            message : "Google Login Failed"
+        })
+    }
+}
+
 // Admin - christina.rodrigo1@gmail.com - securepassword123
 //customer - christina.Rodrigo@example.com - securepassword123
