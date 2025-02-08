@@ -11,4 +11,6 @@ userRouter.post('/', createUser)
 userRouter.post('/create', createUser)
 //Below handles the request - /api/login
 userRouter.post("/login", loginUser)
+
+userRouter.post("/google", createUser)
 export default userRouter;
