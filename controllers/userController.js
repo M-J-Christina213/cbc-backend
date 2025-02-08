@@ -2,6 +2,7 @@ import User from "../models/user.js";
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import dotenv from "dotenv";
+import axios from "axios";
 
 dotenv.config();
 
@@ -89,6 +90,8 @@ export function isAdmin(req){
  return true
 }
 
+
+
 export function isCustomer(req){
     if(req.user===null){
         return false
@@ -101,20 +104,31 @@ export function isCustomer(req){
     return true
 }
 
-export async function googleLogin(req,res){
-    const token = await axios.get('https://www.googleapis.com/oauth2/v3/userInfo',{
-        headers:{
-            Authorization : `Bearer ${token}`
-        }
-    })
-
-    try{
 
 
-    }catch(e){
-        res.json({
-            message : "Google Login Failed"
-        })
+export async function googleLogin(req, res) {
+    console.log(req.body); // Debugging
+
+    const token = req.body.token; // Ensure token is correctly extracted
+    
+    try {
+        const response = await axios.get("https://www.googleapis.com/oauth2/v3/userinfo", {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        });
+
+         res.json({
+            message: "Google Login Successful",
+            user: response.data,
+        });
+
+    } catch (error) {
+        console.error("Google Login Error:", error.message);
+        return res.status(500).json({
+            message: "Google Login Failed",
+            error: error.message,
+        });
     }
 }
 
