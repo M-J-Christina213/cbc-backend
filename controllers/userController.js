@@ -107,18 +107,22 @@ export function isCustomer(req){
 
 
 export async function googleLogin(req, res) {
-    console.log(req.body); // Debugging
+    console.log("Received Token:", req.body.token); // Debugging step
 
-    const token = req.body.token; // Ensure token is correctly extracted
+    const token = req.body.token;
     
+    if (!token) {
+        return res.status(400).json({ message: "Token is required" });
+    }
+
     try {
         const response = await axios.get("https://www.googleapis.com/oauth2/v3/userinfo", {
             headers: {
-                Authorization: `Bearer ${token}`,
+                Authorization: `Bearer ${token.trim()}`, 
             },
         });
 
-         res.json({
+        return res.json({
             message: "Google Login Successful",
             user: response.data,
         });
