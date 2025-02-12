@@ -187,14 +187,7 @@ export async function googleLogin(req, res) {
                 
                 res.json({
                     message: "User created successfully.",
-                    token: token,
-                    user : {
-                        firstName: user.firstName,
-                        secondName: user.secondName,
-                        type: user.type,
-                        profilePicture : user.profilePicture,
-                        email : user.email
-                    }
+                    
                 });
             })
             .catch((error) => {
