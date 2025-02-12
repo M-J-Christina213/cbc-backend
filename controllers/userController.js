@@ -164,7 +164,7 @@ export async function googleLogin(req, res) {
         const newUserData = {
             email: userDetails.email,
             firstName: userDetails.given_name,
-            lastName: userDetails.family_name,
+            secondName: userDetails.family_name,
             type: "customer",
             password : "ccccccc",
             profilePicture: userDetails.picture,
@@ -176,7 +176,7 @@ export async function googleLogin(req, res) {
                     {
                         email: user.email,
                         firstName: user.firstName,
-                        lastName: user.lastName,
+                        secondName: user.secondName,
                         isBlocked: user.isBlocked,
                         type: user.type,
                         profilePicture: user.profilePicture,
@@ -190,7 +190,7 @@ export async function googleLogin(req, res) {
                     token: token,
                     user : {
                         firstName: user.firstName,
-                        lastName: user.lastName,
+                        secondName: user.secondName,
                         type: user.type,
                         profilePicture : user.profilePicture,
                         email : user.email
@@ -199,7 +199,8 @@ export async function googleLogin(req, res) {
             })
             .catch((error) => {
                 res.json({
-                    message: "User not created."
+                    message: "User not created.",
+                    error: error.message,
                 });
             });
        }
