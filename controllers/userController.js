@@ -130,10 +130,81 @@ export async function googleLogin(req, res) {
         const userDetails = userResponse.data;
         console.log('User Details:', userDetails);
 
-        return res.json({
-            message: "Google Login Successful",
-            user: userDetails,
-        });
+        const email = response.data.email;
+       //check if user exist
+       const usersList = await User.find({ email: email });
+       if (usersList.length > 0) {
+           const user = usersList[0];
+           const token = jwt.sign(
+               {
+                   email: user.email,
+                   firstName: user.firstName,
+                   lastName: user.lastName,
+                   isBlocked: user.isBlocked,
+                   type: user.type,
+                   profilePicture: user.profilePicture,
+               }, process.env.SECRET)
+               
+               // Log the generated token for debugging
+           console.log("Generated Token:", token);
+           
+           res.json({
+               message: "User logged in",
+               token: token,
+               user : {
+                   firstName: user.firstName,
+                   lastName: user.lastName,
+                   type: user.type,
+                   profilePicture : user.profilePicture,
+                   email : user.email
+               }
+           })
+       } else {
+        //create new user
+        const newUserData = {
+            email: userDetails.email,
+            firstName: userDetails.given_name,
+            lastName: userDetails.family_name,
+            type: "customer",
+            password : "ccccccc",
+            profilePicture: userDetails.picture,
+        };
+        const user = new User(newUserData);
+        user.save()
+            .then(() => {
+                const token = jwt.sign(
+                    {
+                        email: user.email,
+                        firstName: user.firstName,
+                        lastName: user.lastName,
+                        isBlocked: user.isBlocked,
+                        type: user.type,
+                        profilePicture: user.profilePicture,
+                    }, process.env.SECRET)
+                    
+                    // Log the generated token for debugging
+                console.log("Generated Token:", token);
+                
+                res.json({
+                    message: "User created successfully.",
+                    token: token,
+                    user : {
+                        firstName: user.firstName,
+                        lastName: user.lastName,
+                        type: user.type,
+                        profilePicture : user.profilePicture,
+                        email : user.email
+                    }
+                });
+            })
+            .catch((error) => {
+                res.json({
+                    message: "User not created."
+                });
+            });
+       }
+       
+        
 
     } catch (error) {
         console.error("Google Login Error:", error.message);
