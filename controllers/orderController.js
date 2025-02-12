@@ -2,12 +2,9 @@ import order from "../models/order.js"
 import { isAdmin, isCustomer } from "./userController.js";
 import Product from "../models/product.js";
 export async function createOrder(req, res) {
-    if (!isCustomer) {
-        return res.json({
-            message: "Please login as customer to create orders"
-        });
+    if (!isCustomer(req.user)) {
+        return res.status(403).json({ message: "Please log in as a customer to create orders" });
     }
-
     try {
         const latestOrder = await order.find().sort({ orderId: -1 }).limit(1);
         let orderId;
@@ -33,18 +30,14 @@ export async function createOrder(req, res) {
                 productId: newOrderData.orderedItems[i].productId
             })
 
-            if (product == null) {
-                res.json({
-                    message: "Product with id " + newOrderData.orderedItems[i].productId + " not found"
-                })
-                return
+            if (!product) {
+                return res.status(404).json({ message: `Product with id ${newOrderData.orderedItems[i].productId} not found` });
             }
 
             if (product.stock < newOrderData.orderedItems[i].qty) {
-                res.json({
-                    message: "Sorry, not enough stock available for " + product.productName + " Please update your order and try again"
-                })
+                return res.status(400).json({ message: `Sorry, not enough stock available for ${product.productName}. Please update your order and try again.` });
             }
+            
             // Build the product structure for the new order
             newProductArray[i] = {
                 name: product.productName,
@@ -63,29 +56,31 @@ export async function createOrder(req, res) {
 
             await Product.updateOne(
                 { productId: orderedItem.productId },
-                { quantity: Product.stock - orderedItem.qty }
+                { $inc: { stock: -orderedItem.qty } }
             )
         }
 
 
-        // Assign the new order details including ordered items
-        newOrderData.orderedItems = newProductArray
+         // Assign the new order details including ordered items
+         const newOrder = new Order({
+            orderId: orderId,
+            email: req.user.email,
+            orderedItems: newProductArray,
+            paymentId: newOrderData.paymentId,
+            status: "preparing",
+            notes: newOrderData.notes,
+            name: newOrderData.name,
+            address: newOrderData.address,
+            phone: newOrderData.phone,
+            date: new Date(),
+        });
 
-        newOrderData.orderId = orderId;
-        newOrderData.email = req.user.email;
-
-        const newOrder = new order(newOrderData);
-        const savedOrder = await newOrder.save()
-
-        res.json({
-            message: "Order created",
-            newOrder: savedOrder
-        })
+        await newOrder.save();
+        res.status(201).json({ message: "Order created successfully", order: newOrder });
 
     } catch (error) {
-        res.status(500).json({
-            message: error.message
-        });
+        console.error("Error creating order:", error);
+        res.status(500).json({ message: "Internal Server Error" });
     }
 }
 
