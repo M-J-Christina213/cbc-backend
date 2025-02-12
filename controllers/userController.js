@@ -130,7 +130,7 @@ export async function googleLogin(req, res) {
         const userDetails = userResponse.data;
         console.log('User Details:', userDetails);
 
-        const email = response.data.email;
+        const email = userDetails.email;
        //check if user exist
        const usersList = await User.find({ email: email });
        if (usersList.length > 0) {
