@@ -2,9 +2,15 @@ import order from "../models/order.js"
 import { isAdmin, isCustomer } from "./userController.js";
 import Product from "../models/product.js";
 export async function createOrder(req, res) {
+    console.log("Decoded user in createOrder:", req.user);
+    if (!req.user) {
+        return res.status(401).json({ message: "User not authenticated" });
+    }
+
     if (!isCustomer(req.user)) {
         return res.status(403).json({ message: "Please log in as a customer to create orders" });
     }
+    
     try {
         const latestOrder = await order.find().sort({ orderId: -1 }).limit(1);
         let orderId;
