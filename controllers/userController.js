@@ -76,31 +76,19 @@ export function loginUser(req, res) {
     });
 }
 
-export function isAdmin(req){
- if(req.user===null){
-    return false
- }
- if (req.user.type !== "admin"){
-    return false
- }
- return true
+export function isAdmin(req) {
+    if (!req.user || !req.user.type) {  // Ensure req.user exists
+        return false;
+    }
+    return req.user.type === "admin";  // Return true if type is "admin"
 }
 
-
-
-export function isCustomer(req){
-    if(req.user===null){
-        return false
+export function isCustomer(req) {
+    if (!req.user || !req.user.type) {  // Ensure req.user exists
+        return false;
     }
-
-    if(req.user.type !== "customer"){
-        return false
-    }
-
-    return true
+    return req.user.type === "customer";  // Return true if type is "customer"
 }
-
-
 
 export async function googleLogin(req, res) {
     console.log("Received Token:", req.body.token);
