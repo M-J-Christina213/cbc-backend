@@ -10,18 +10,13 @@ export function createUser(req, res) {
     const newUserData = req.body;
 
     if (newUserData.type === "admin") {
-        if (!req.user) {
-            return res.json({
-                message: "Please login as administrator to create admin accounts."
-            });
-        }
-    
-        if (req.user.type !== "admin") {
+        if (!isAdmin(req)) {
             return res.json({
                 message: "Only administrators can create admin accounts."
             });
         }
     }
+    
     newUserData.password = bcrypt.hashSync(newUserData.password, 10);
 
     const user = new User(newUserData);
@@ -37,6 +32,7 @@ export function createUser(req, res) {
             });
         });
 }
+
 export function loginUser(req, res) { 
     User.find({ email: req.body.email }).then((users) => {
         if (users.length == 0) {
