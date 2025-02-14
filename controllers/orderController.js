@@ -190,3 +190,33 @@ export async function getQuote(req, res) {
         });
     }
 }
+
+export async function updateOrder(req, res) {
+    if (!isAdmin(req)) {
+      return res.status(403).json({ message: "Please log in as an admin to update orders" });
+    }
+  
+    try {
+      const { orderId } = req.params;
+      const { notes, status } = req.body;
+      const validStatuses = ["canceled", "delivered", "completed", "paused", "pending"];
+  
+      if (!validStatuses.includes(status)) {
+        return res.status(400).json({ message: "Invalid status" });
+      }
+  
+      const order = await order.findOneAndUpdate(
+        { orderId },
+        { notes, status },
+        { new: true }
+      );
+  
+      if (!order) {
+        return res.status(404).json({ message: "Order not found" });
+      }
+  
+      res.json({ message: "Order updated successfully", order });
+    } catch (error) {
+      res.status(500).json({ message: error.message });
+    }
+  }
