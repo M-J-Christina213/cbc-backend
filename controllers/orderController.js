@@ -205,17 +205,17 @@ export async function updateOrder(req, res) {
         return res.status(400).json({ message: "Invalid status" });
       }
   
-      const order = await order.findOneAndUpdate(
+      const updatedOrder = await order.findOneAndUpdate(
         { orderId },
         { notes, status },
         { new: true }
       );
   
-      if (!order) {
+      if (!updatedOrder) {
         return res.status(404).json({ message: "Order not found" });
       }
   
-      res.json({ message: "Order updated successfully", order });
+      res.json({ message: "Order updated successfully", order: updatedOrder });
     } catch (error) {
       res.status(500).json({ message: error.message });
     }
