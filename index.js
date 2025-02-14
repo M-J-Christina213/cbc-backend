@@ -27,13 +27,13 @@ app.use(bodyParser.json())
 app.use((req, res, next) => {
   const token = req.header("authorization")?.replace("Bearer ", "");
 
-  console.log("Received Token:", token);
+  // console.log("Received Token:", token);
 
   if (token != null) {
       jwt.verify(token, process.env.SECRET, (error, decoded) => {
           if (!error) {
               req.user = decoded;
-              console.log("Decoded user:", decoded); // Check if admin is decoded
+              // console.log("Decoded user:", decoded); // Check if admin is decoded
               next();
           } else {
               req.user = null;

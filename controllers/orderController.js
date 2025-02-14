@@ -1,13 +1,14 @@
 import order from "../models/order.js"
 import { isAdmin, isCustomer } from "./userController.js";
 import Product from "../models/product.js";
+
 export async function createOrder(req, res) {
-    console.log("Decoded user in createOrder:", req.user);
+   
     if (!req.user) {
         return res.status(401).json({ message: "User not authenticated" });
     }
 
-    if (!isCustomer(req.user)) {
+    if (!isCustomer(req)) {
         return res.status(403).json({ message: "Please log in as a customer to create orders" });
     }
     
@@ -33,7 +34,7 @@ export async function createOrder(req, res) {
         // Loop through orderedItems to find corresponding products and create a new array
         for (let i = 0; i < newOrderData.orderedItems.length; i++) {
             const product = await Product.findOne({
-                productId: newOrderData.orderedItems[i].productId
+                productID: newOrderData.orderedItems[i].productId
             })
 
             if (!product) {
@@ -68,7 +69,7 @@ export async function createOrder(req, res) {
 
 
          // Assign the new order details including ordered items
-         const newOrder = new Order({
+         const newOrder = new order({
             orderId: orderId,
             email: req.user.email,
             orderedItems: newProductArray,

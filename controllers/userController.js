@@ -84,6 +84,7 @@ export function isAdmin(req) {
 }
 
 export function isCustomer(req) {
+console.log("User Type:", req.user);
     if (!req.user || !req.user.type) {  // Ensure req.user exists
         return false;
     }
