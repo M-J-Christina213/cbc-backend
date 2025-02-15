@@ -111,22 +111,27 @@ export async function getProductById(req, res) {
 }
 
 export async function searchProducts(req, res) {
-  const query = req.params.query;
-  try {
-
-  const products = await Product.find(
-    {
-        $or: [
+    const query = req.params.query;
+  
+    try {
+      let products;
+      if (!query || query.trim() === "") {
+        // If search query is empty, return all products
+        products = await Product.find({});
+      } else {
+        // If search query is provided, perform search
+        products = await Product.find({
+          $or: [
             { productName: { $regex: query, $options: "i" } },
-            { altNames:  {$regex: query, $options: "i" } }
-        ],
-    
-    });
-
-  res.json(products)
-  }catch(error){
-      console.error("Error fetching product:", error.message);
+            { altNames: { $regex: query, $options: "i" } },
+          ],
+        });
+      }
+  
+      res.json(products);
+    } catch (error) {
+      console.error("Error fetching products:", error.message);
       res.status(500).json({ error: "An internal server error occurred." });
+    }
   }
   
-}
