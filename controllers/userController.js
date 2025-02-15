@@ -194,5 +194,14 @@ export async function googleLogin(req, res) {
     }
 }
 
+export async function getUser(req, res) {
+    if (!req.user) {
+        return res.status(404).json({
+            message: "Please login to view user details"
+        });
+    }
+
+    res.json(req.user)
+}
 // Admin - christina.rodrigo1@gmail.com - securepassword123
 //customer - christina.Rodrigo@example.com - securepassword123

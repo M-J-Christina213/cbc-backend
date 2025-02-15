@@ -1,9 +1,10 @@
 import express from 'express';
-import { createUser, googleLogin, loginUser } from '../controllers/userController.js';
+import { createUser, getUser, googleLogin, loginUser } from '../controllers/userController.js';
 
 
 const userRouter = express.Router();
 
+userRouter.get("/", getUser)
 //Below handles the request - /api/users
 userRouter.post('/', createUser)
 
