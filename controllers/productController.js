@@ -114,7 +114,14 @@ export async function searchProducts(req, res) {
   const query = req.params.query;
   try {
 
-  const products = await Product.find({name: { $regex: "/" + query + "/", $options: "i" }});
+  const products = await Product.find(
+    {
+        $or: [
+            { productName: { $regex: query, $options: "i" } },
+            { altNames:  {$regex: query, $options: "i" } }
+        ],
+    
+    });
 
   res.json(products)
   }catch(error){
