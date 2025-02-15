@@ -109,3 +109,17 @@ export async function getProductById(req, res) {
       res.status(500).json({ error: "An internal server error occurred." });
   }
 }
+
+export async function searchProducts(req, res) {
+  const query = req.params.query;
+  try {
+
+  const products = await Product.find({name: { $regex: "/" + query + "/", $options: "i" }});
+
+  res.json(products)
+  }catch(error){
+      console.error("Error fetching product:", error.message);
+      res.status(500).json({ error: "An internal server error occurred." });
+  }
+  
+}
