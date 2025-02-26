@@ -10,6 +10,15 @@ const productSchema = mongoose.Schema({
         type : String,
         required : true
     },
+    category :{
+        type: String,
+        required: true
+    },
+    subcategory :{
+        type: String,
+        required: true
+    },
+
     altNames : [
         {
             type : String
