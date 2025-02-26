@@ -26,16 +26,22 @@ export function createProduct(req,res){
     
 }
 
-export function getProducts(req,res){
-    Product.find({}).then((products)=>{
-        res.json(products)
-    })
-    .catch((error) => {
-        res.status(500).json({
-          message: error.message || "An error occurred while fetching the products"
-        });
+export function getProducts(req, res) {
+  const { category } = req.query; // Get category from query parameters
+
+  const filter = category ? { category: category } : {}; // Apply category filter if provided
+
+  Product.find(filter)
+      .then((products) => {
+          res.json(products);
+      })
+      .catch((error) => {
+          res.status(500).json({
+              message: error.message || "An error occurred while fetching the products"
+          });
       });
 }
+
 
 export function deleteProducts (req,res){
     if(!isAdmin(req)){
