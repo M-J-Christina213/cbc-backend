@@ -27,20 +27,24 @@ export function createProduct(req,res){
 }
 
 export function getProducts(req, res) {
-  const { category } = req.query; // Get category from query parameters
+  const { category } = req.query; // Extract category from query params
+  console.log("Category filter received:", category); // Debugging
 
-  const filter = category ? { category: category } : {}; // Apply category filter if provided
+  const filter = category ? { category: category } : {}; // Apply category filter
 
   Product.find(filter)
       .then((products) => {
+          console.log("Fetched products:", products.length); // Log number of products found
           res.json(products);
       })
       .catch((error) => {
+          console.error("Error fetching products:", error); // Log the error
           res.status(500).json({
-              message: error.message || "An error occurred while fetching the products"
+              message: error.message || "An error occurred while fetching the products",
           });
       });
 }
+
 
 
 export function deleteProducts (req,res){
