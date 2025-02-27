@@ -30,20 +30,22 @@ export function getProducts(req, res) {
   const { category } = req.query; // Extract category from query params
   console.log("Category filter received:", category); // Debugging
 
-  const filter = category ? { category: category } : {}; // Apply category filter
+  // Use case-insensitive regex for category filtering
+  const filter = category ? { category: { $regex: new RegExp(`^${category}$`, "i") } } : {}; 
 
   Product.find(filter)
-      .then((products) => {
-          console.log("Fetched products:", products.length); // Log number of products found
-          res.json(products);
-      })
-      .catch((error) => {
-          console.error("Error fetching products:", error); // Log the error
-          res.status(500).json({
-              message: error.message || "An error occurred while fetching the products",
-          });
+    .then((products) => {
+      console.log("Fetched products:", products.length);
+      res.json(products);
+    })
+    .catch((error) => {
+      console.error("Error fetching products:", error);
+      res.status(500).json({
+        message: error.message || "An error occurred while fetching the products",
       });
+    });
 }
+
 
 
 
