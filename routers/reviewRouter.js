@@ -1,7 +1,11 @@
 import express from 'express';
-import { submitReview } from '../controllers/reviewController.js';
+import { getReviewsByProduct, submitReview } from '../controllers/reviewController.js';
 const reviewRouter = express.Router();
 
- productRouter.put("/:productID", submitReview)
+ // Route to submit a review for a product
+reviewRouter.post("/:productID", submitReview);
 
- export default reviewRouter;
+// Route to get reviews of a specific product
+reviewRouter.get("/:productID", getReviewsByProduct);
+
+export default reviewRouter;

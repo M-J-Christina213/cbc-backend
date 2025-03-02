@@ -1,5 +1,5 @@
-import Review from "../models/review"; 
-import Product from "../models/product"; 
+import Review from "../models/review.js"; 
+import Product from "../models/product.js"; 
 
 
 // Controller to handle submitting a review
