@@ -1,21 +1,13 @@
-import Review from "../models/review";
-import Product from "../models/product";
+import Review from "../models/review"; 
+import Product from "../models/product"; 
 
-import Review from "../models/review";
-import Product from "../models/product";
-
-// Add a new review for a product
-export async function submitReview(req, res) {
+// Controller to handle submitting a review
+export const submitReview = async (req, res) => {
   try {
     const { name, email, rating, review } = req.body;
-    const { productID } = req.params; // Get the productID from URL params or context
+    const { productID } = req.params; 
 
-    // Validate the input
-    if (!name || !email || !rating || !review || !productID) {
-      return res.status(400).json({ message: "All fields are required" });
-    }
-
-    // Check if the product exists by productID
+    // Check if the product exists
     const product = await Product.findById(productID);
     if (!product) {
       return res.status(404).json({ message: "Product not found" });
@@ -34,12 +26,33 @@ export async function submitReview(req, res) {
     await newReview.save();
 
     // Return success response
-    res.status(201).json({
-      message: "Review added successfully",
+    return res.status(201).json({
+      message: "Review submitted successfully!",
       review: newReview,
     });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: "Error adding review", error: error.message });
+    return res.status(500).json({ message: "Error submitting review" });
+  }
+};
+
+// Controller to get all reviews for a specific product
+export const getReviewsByProduct = async (req, res) => {
+  try {
+    const { productID } = req.params; 
+
+    // Find reviews for the product
+    const reviews = await Review.find({ productID }).populate("productID", "productName"); 
+
+    // Check if there are any reviews
+    if (reviews.length === 0) {
+      return res.status(404).json({ message: "No reviews found for this product" });
+    }
+
+    // Return the reviews
+    return res.status(200).json({ reviews });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: "Error retrieving reviews" });
   }
 };
