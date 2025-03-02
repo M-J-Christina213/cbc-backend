@@ -7,6 +7,7 @@ import dotenv from "dotenv";
 import productRouter from './routers/productRouter.js';
 import orderRouter from './routers/orderRouter.js';
 import cors from 'cors';
+import reviewRouter from './routers/reviewRouter.js';
 dotenv.config()
 
 const app = express();
@@ -53,7 +54,7 @@ app.use((req, res, next) => {
 app.use("/api/users", userRouter);
 app.use("/api/products", productRouter);
 app.use("/api/orders", orderRouter);
-
+app.use("api/reviews", reviewRouter)
 
 app.listen(5000, 
     () => {

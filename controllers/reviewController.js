@@ -1,8 +1,9 @@
 import Review from "../models/review"; 
 import Product from "../models/product"; 
 
+
 // Controller to handle submitting a review
-export const submitReview = async (req, res) => {
+export async function submitReview(res,req) {
   try {
     const { name, email, rating, review } = req.body;
     const { productID } = req.params; 
@@ -37,7 +38,7 @@ export const submitReview = async (req, res) => {
 };
 
 // Controller to get all reviews for a specific product
-export const getReviewsByProduct = async (req, res) => {
+export async function getReviewsByProduct (req, res) {
   try {
     const { productID } = req.params; 
 
