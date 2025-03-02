@@ -53,6 +53,7 @@ app.use((req, res, next) => {
 app.use("/api/users", userRouter);
 app.use("/api/products", productRouter);
 app.use("/api/orders", orderRouter);
+app.use("api/reviews", reviewRouter)
 
 app.listen(5000, 
     () => {
