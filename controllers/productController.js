@@ -27,15 +27,24 @@ export function createProduct(req, res) {
 }
 
 export function getProducts(req, res) {
-  const { category } = req.query; // Extract category from query params
-  console.log("Category filter received:", category); // Debugging
+  const { category, subcategory } = req.query; // Extract query parameters
+  let filter = {}; // Initialize filter object
 
-  // Use case-insensitive regex for category filtering
-  const filter = category ? { category: { $regex: new RegExp(`^${category}$`, "i") } } : {};
+  // If category is provided, filter by category (case-insensitive)
+  if (category) {
+    filter.category = { $regex: new RegExp(category, "i") };
+  }
+
+  // If subcategory is provided, filter by subcategory (case-insensitive)
+  if (subcategory) {
+    filter.subcategory = { $regex: new RegExp(subcategory, "i") };
+  }
+
+  console.log("Filter applied:", filter); // Debugging
 
   Product.find(filter)
     .then((products) => {
-      console.log("Fetched products:", products.length);
+      console.log(`Fetched ${products.length} products`);
       res.json(products);
     })
     .catch((error) => {
@@ -147,5 +156,25 @@ export async function searchProducts(req, res) {
   } catch (error) {
     console.error("Error fetching products:", error.message);
     res.status(500).json({ error: "An internal server error occurred." });
+  }
+}
+
+export async function getCategoriesAndSubcategories(req, res) {
+  try {
+    // Fetch distinct categories
+    const categories = await Product.distinct("category");
+
+    // Fetch distinct subcategories
+    const subcategories = await Product.distinct("subcategory");
+
+    console.log("Fetched categories:", categories.length);
+    console.log("Fetched subcategories:", subcategories.length);
+
+    res.json({ categories, subcategories });
+  } catch (error) {
+    console.error("Error fetching categories and subcategories:", error);
+    res.status(500).json({
+      message: error.message || "An error occurred while fetching categories and subcategories",
+    });
   }
 }
